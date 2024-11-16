@@ -11,5 +11,5 @@ Collaborative study hub
 - Grp calendar
 - Profile Customization
 
-If got time
-Emoji reaction
+## For development
+- For ajax requests which require user to be logged in, pls use fetch.js fetchWithAuth function (see dashboard.js for usage)
