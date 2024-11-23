@@ -9,7 +9,7 @@ const fetchWithAuth = async (url, options = {}) => {
             return;
         }
 
-        return response.json(); // Otherwise, return the JSON data
+        return response; // Otherwise, return the response
     } catch (error) {
         console.error('Error during fetch:', error);
         throw error;

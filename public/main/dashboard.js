@@ -6,7 +6,5 @@ $(document).ready(function () {
         headers: {
             'Authorization': `Bearer ${token}` // Include the token in the request
         }
-    }).then(function (response) {
-        console.log(response);
-    })
+    });
 })

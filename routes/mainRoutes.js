@@ -4,7 +4,7 @@ const router = express.Router();
 const authMiddleware = require('../middleware/authMiddleware.js');
 
 
-router.get('/dashboard',authMiddleware, async function (req, res) {
+router.get('/dashboard', authMiddleware, async function (req, res) {
     try {
         return res.status(200).json("dashboard results");
 
