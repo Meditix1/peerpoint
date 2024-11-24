@@ -4,6 +4,8 @@ const routes = require('./routes/routes.js');
 const accountRoutes = require('./routes/accountRoutes.js');
 const mainRoutes = require('./routes/mainRoutes.js');
 const groupRoutes = require('./routes/groupRoutes.js');
+const  ocrRoutes = require('./routes/OCRroutes.js');
+
 const bodyParser = require("body-parser");
 
 const app = express();
@@ -21,5 +23,6 @@ app.use('/', routes)
 app.use('/account', accountRoutes)
 app.use('/main', mainRoutes)
 app.use('/groups', groupRoutes)
+app.use('/ocr', ocrRoutes); // Add the endpoint for flashcards
 
 module.exports = app;
