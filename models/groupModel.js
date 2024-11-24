@@ -40,6 +40,11 @@ module.exports.getUserViewableGroups = async function getUserViewableGroups(toke
         GROUP BY g.id;`;
 
     const groups = await query(sqlGroups, [requestingUserId]);
+
+    if (groups.rows.length == 0) {
+        return [];
+    }
+
     const groupRows = groups.rows;
 
     var createdByIds = groupRows.map(a => a.created_by).filter((a, index, self) => self.indexOf(a) === index);
@@ -110,3 +115,33 @@ module.exports.getGroupDetails = async function getGroupDetails(group_id) {
 
     return toReturn;
 }
+
+module.exports.addMember = async function addNewMember(group_id, invited_user_email) {
+    try {
+        // Check if the invited user exists
+        const invitedUserSql = `SELECT user_id FROM users WHERE email = $1`;
+        const userRes = await query(invitedUserSql, [invited_user_email]);
+
+        if (userRes.rowCount === 0) {
+            return { error: "User not found." }; // User not found
+        }
+
+        const invitedUserId = userRes.rows[0].user_id;
+
+        // Attempt to insert the user into the group
+        const sql = `INSERT INTO group_members (group_id, user_id, group_role)
+                     VALUES ($1, $2, 'Member')`;
+
+        const insertResult = await query(sql, [group_id, invitedUserId]);
+
+        return insertResult;
+    } catch (error) {
+        if (error.code === '23505') { // Unique constraint violation
+            console.error("Duplicate entry: User already in the group.");
+            return { error: "User already in the group." };
+        } else {
+            console.error("Unexpected error:", error);
+            throw error; // Re-throw unexpected errors
+        }
+    }
+};

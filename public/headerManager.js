@@ -12,20 +12,19 @@ function decodeJWT(token) {
 }
 
 const decoded = decodeJWT(jwtTokenHeader);
-console.log(decoded);
 
 // Get user image if not already exist
 async function fetchUserInfo() {
-        try {
-            const response = await fetch('/account/getUserInfo?user_id=' + decoded.user.id, {
-                method: 'GET'
-            });
-            const res = await response.json();
-            sessionStorage.setItem("profilePic", res.profile_pic);
-            updateProfilePic(res.profile_pic); // Update the profile picture in the header
-        } catch (err) {
-            alert("Error fetching user info");
-        }
+    try {
+        const response = await fetch('/account/getUserInfo?user_id=' + decoded.user.id, {
+            method: 'GET'
+        });
+        const res = await response.json();
+        sessionStorage.setItem("profilePic", res.profile_pic);
+        updateProfilePic(res.profile_pic); // Update the profile picture in the header
+    } catch (err) {
+        alert("Error fetching user info");
+    }
 }
 
 // Function to update the profile picture in the header
@@ -40,14 +39,14 @@ function updateProfilePic(profilePic) {
 class WebsiteHeader extends HTMLElement {
     connectedCallback() {
         this.innerHTML = `
-        <div class="navbar">
+        <div class="navbar mb-5">
             <div class="logo">
                 <img alt="PeerPoint logo" height="40" src="../img/PeerPoint-Logo.png" width="40"/>
                 PeerPoint
             </div>
             <div class="nav-links">
-                <a href="#">Home</a>
-                <a href="../group/groupList.html">Groups</a>
+                <a href="/main/dashboard.html">Home</a>
+                <a href="../group/groupList.html">Projects</a>
                 <a href="#">Services</a>
                 <a href="#">Contact</a>
             </div>

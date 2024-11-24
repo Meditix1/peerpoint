@@ -1,0 +1,18 @@
+.spinner-border {
+    height: 60%;
+    display: inline-block;
+    vertical-align: text-bottom;
+    border: 0.2em solid transparent;
+    border-top-color: currentColor;
+    border-radius: 50%;
+    animation: spinner-border 0.75s linear infinite;
+}
+
+@keyframes spinner-border {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

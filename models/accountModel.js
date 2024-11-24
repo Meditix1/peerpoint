@@ -48,6 +48,32 @@ module.exports.uploadProfilePicture = (b64string, token) => {
     return query(sql);
 }
 
+module.exports.updateUsername = async (newUsername, token) => {
+    const decoded = jwt.decode(token);
+    const requestingUserId = decoded.user.id;
+
+    const sqlUpdate = `
+        UPDATE users
+        SET username = $1
+        WHERE user_id = $2
+        RETURNING user_id, username, email;
+    `;
+
+    try {
+        const updateResults = await query(sqlUpdate, [newUsername, requestingUserId]);
+
+        if (updateResults.rowCount === 0) {
+            throw new Error("User not found or username already exists.");
+        }
+
+        return updateResults.rows[0];
+    } catch (error) {
+        console.error("Error updating username:", error.message);
+        throw error;
+    }
+};
+
+
 module.exports.getUserInfo = (user_id) => {
     const sql = `SELECT username, email, profile_pic FROM users WHERE user_id = $1`;
     return query(sql, [user_id]).then(function (result) {
