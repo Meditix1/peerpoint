@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OCR Image Upload</title>
+  <link rel="stylesheet" href="../css/styles.css"> <!-- Optional for adding CSS -->
+</head>
+<body>
+  <div class="container">
+    <h1>OCR Image Upload</h1>
+    <div class="upload-box">
+      <input type="file" id="imageUpload" accept="image/png, image/jpeg, image/jpg">
+      <label for="imageUpload">Click to upload an image (PNG, JPG, JPEG)</label>
+    </div>
+    <div id="imagePreviewContainer">
+      <img id="imagePreview" style="max-width: 100%; display: none;" />
+    </div>
+    <button id="submitButton">Submit</button>
+    <div id="result">
+      <h3>Extracted Text:</h3>
+      <pre id="extractedText"></pre>
+    </div>
+    <div id="error" class="error"></div>
+  </div>
+
+  <script src="ocr.js"></script> <!-- Link to external JavaScript file -->
+</body>
+</html>
