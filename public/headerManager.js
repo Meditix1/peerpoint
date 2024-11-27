@@ -30,6 +30,7 @@ async function fetchUserInfo() {
         }
         
     } catch (err) {
+        console.error(err)
         alert("Error fetching user info");
     }
 }

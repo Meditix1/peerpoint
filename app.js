@@ -27,5 +27,4 @@ app.use('/groups', groupRoutes)
 app.use('/ocr', ocrRoutes); // Add the endpoint for flashcards
 app.use('/study', groupstudyRoutes); // Add the endpoint for flashcards
 
-
 module.exports = app;

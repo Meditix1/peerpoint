@@ -61,6 +61,7 @@ $(document).ready(function () {
     $("#editProfilePic").on("click", async function () {
         const { value: file } = await Swal.fire({
             title: "Update Profile Picture",
+            text: "Image cannot exceed 3 MB!",
             input: "file",
             inputAttributes: {
                 "accept": "image/*",
@@ -70,6 +71,14 @@ $(document).ready(function () {
         });
     
         if (file) {
+            if(file.size > 3900000) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops!',
+                    text: 'Please upload a file less than 3 MB.',
+                });
+                return;
+            }
             // Loading popup
             Swal.fire({
                 title: 'Uploading...',
@@ -81,7 +90,15 @@ $(document).ready(function () {
             });
     
             var b64string = await convertImgToB64(file);
-    
+            if(b64string.length > 5000000) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops!',
+                    text: 'Please upload a file less than 3 MB.',
+                });
+                return;
+            }
+            
             fetchWithAuth('/account/uploadProfilePic', {
                 method: 'POST',
                 headers: {
