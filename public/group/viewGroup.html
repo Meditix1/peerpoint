@@ -1,131 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Group List</title>
+    <title>Group List and Study Materials</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=add_circle" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <script src="../fetch.js" type="text/javascript"></script>
     <script src="../headerManager.js" type="text/javascript"></script>
     <link rel="stylesheet" href="../css/site.css" />
-
     <script src='https://code.jquery.com/jquery-3.6.3.min.js' type="text/javascript"></script>
-    <!-- DataTables -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
-    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+    <link rel="stylesheet" href="../css/group.css" />
+    <link rel="stylesheet" href="../css/styles.css" />
 
-
-    <script src="./viewGroup.js" type="text/javascript"></script>
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-
-        .container {
-            width: 80%;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .header h1 {
-            margin: 0;
-            font-size: 2.5em;
-        }
-
-        .header p {
-            color: #777;
-        }
-
-        .group-details,
-        .group-members {
-            margin-bottom: 20px;
-        }
-
-        .group-details h2,
-        .group-members h2 {
-            font-size: 1.5em;
-            margin-bottom: 10px;
-        }
-
-        .group-details p,
-        .group-members p {
-            margin: 5px 0;
-        }
-
-        .group-members ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .group-members li {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .group-members img {
-            border-radius: 50%;
-            margin-right: 10px;
-        }
-
-        .group-members .member-info {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .group-members .member-info span {
-            font-weight: bold;
-        }
-    </style>
+    <script src="groupstudy.js" type="text/javascript"></script> <!-- Group Study JS -->
 </head>
 
 <body>
     <website-header></website-header>
 
+    <!-- Group Info Section -->
     <div class="container">
-        <div class="header">
-            <h1 id="grpName">
-                Loading...
-            </h1>
-            <p id="grpDesc">
-                Loading...
-            </p>
-        </div>
-        <div class="group-details">
-            <p>
-                <strong>
-                    Created On:
-                </strong>
-                <span id="createdAt">
-                    Loading...
-                </span>
-            </p>
-            <p><a href="./groupChat.html">Group Chat</a></p>
-        </div>
-        <div class="group-members">
-            <h2>
-                Group Members
-            </h2>
-            <ul id="groupMemberList">
-                <li>Loading...</li>
-            </ul>
+        <div class="card-container">
+            <div class="card-header">
+                <h1 id="grpName">Loading...</h1>
+                <p id="grpDesc">Loading...</p>
+            </div>
+            <div class="card-footer">
+                <p><strong>Created On:</strong> <span id="createdAt">Loading...</span></p>
+                <a href="./groupChat.html">Group Chat</a>
+            </div>
+            <div class="group-members">
+                <h2>Group Members</h2>
+                <ul id="groupMemberList">
+                    <li>Loading...</li>
+                </ul>
+            </div>
         </div>
     </div>
-</body>
 
+    <!-- Study Materials Section -->
+    <div class="container study-section">
+        <h1>Study Materials</h1>
+
+        <!-- Tabs for filtering by tags -->
+        <div id="tabs-container" class="tabs-container"></div>
+
+        <!-- Flashcards for the study materials -->
+        <div id="flashcards-container" class="flashcards-container"></div>
+
+        <!-- Button to trigger the 'Add Material' form -->
+        <button id="add-material-btn" class="btn btn-primary">Add Material</button>
+    </div>
+
+    <!-- Popup form to add new material -->
+    <div id="add-material-popup" class="popup-container">
+        <div class="popup-content">
+            <h2>Add Study Material</h2>
+            <textarea id="material-content" placeholder="Enter study content"></textarea>
+            <input type="text" id="material-tags" placeholder="Enter tags (comma separated)">
+            <div class="popup-buttons">
+                <button id="save-material-btn" class="btn">Save</button>
+                <button id="cancel-btn" class="btn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="viewGroup.js" type="text/javascript"></script>
+</body>
 </html>
