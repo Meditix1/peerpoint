@@ -9,13 +9,17 @@ const authMiddleware = require('../middleware/authMiddleware.js');
 // Endpoint to add study material to a group
 router.post('/:groupId/materials', async (req, res) => {
     const { groupId } = req.params;
-    const { userId, content, tags } = req.body;
+    const { token, content, tags } = req.body;
+    console.log(token)
   
     if (!content) {
       return res.status(400).json({ message: 'Content is required.' });
     }
   
     try {
+      // Decode the JWT Token
+      var decoded = jwt.decode(token);
+      var userId = decoded.user.id;
       // Add study material to the group using the model
       const material = await model.addStudyMaterial(groupId, userId, content, tags);
       res.status(201).json({ message: 'Material added successfully!', material });

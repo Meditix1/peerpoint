@@ -4,43 +4,42 @@ document.addEventListener('DOMContentLoaded', () => {
     const groupId = params.get('id');
     const token = sessionStorage.getItem("authToken");
 
-   // Fetch Group Details
-const fetchGroupDetails = async () => {
-    try {
-        const response = await fetchWithAuth(`/groups/getGroupDetails?group_id=${groupId}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-        });
+    // Fetch Group Details
+    const fetchGroupDetails = async () => {
+        try {
+            const response = await fetchWithAuth(`/groups/getGroupDetails?group_id=${groupId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+            });
 
-        const res = await response.json();
-        $('#grpDesc').text(res.description);
-        $('#grpName').text(res.group_name);
+            const res = await response.json();
+            $('#grpDesc').text(res.description);
+            $('#grpName').text(res.group_name);
 
-        const createdAt = new Date(res.created_at);
-        const options = {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            timeZoneName: 'short'
-        };
-        const formattedDate = createdAt.toLocaleString('en-US', options);
-        $('#createdAt').text(formattedDate);
+            const createdAt = new Date(res.created_at);
+            const options = {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                timeZoneName: 'short'
+            };
+            const formattedDate = createdAt.toLocaleString('en-US', options);
+            $('#createdAt').text(formattedDate);
 
-        // Populate group members list
-        let grpMembersHtmlString = "";
-        for (let m in res.group_members) {
-            let member = res.group_members[m];
+            // Populate group members list
+            let grpMembersHtmlString = "";
+            for (let m in res.group_members) {
+                let member = res.group_members[m];
 
-            // Static fallback profile image if no image URL is provided
-            const profileImageUrl = member.profile_picture_url || 'https://storage.googleapis.com/a1aa/image/fbWk0TX86Mwf7UEFk1eWmYtXi6VyuZaA80lfM98lF62V5jPPB.jpg';
-
-            grpMembersHtmlString += `
+                // Static fallback profile image if no image URL is provided
+                const profileImageUrl = member.profile_picture_url || '../img/blank_pfp.png';
+                grpMembersHtmlString += `
                 <li>
                     <img alt="Profile picture of ${member.username}" height="50" width="50" src="${profileImageUrl}" />
                     <div class="member-info">
@@ -48,47 +47,47 @@ const fetchGroupDetails = async () => {
                         <span>Role: ${member.group_role}</span>
                     </div>
                 </li>`;
-        }
+            }
 
-        // Add new member functionality
-        grpMembersHtmlString += `
+            // Add new member functionality
+            grpMembersHtmlString += `
             <li id="addMember" style="cursor:pointer;">
                 <span class="material-symbols-outlined" style="font-size: 50px; margin-right: 10px;">add_circle</span>
                 <div class="member-info"><span>Add Member</span></div>
             </li>`;
 
-        $('#groupMemberList').html(grpMembersHtmlString);
+            $('#groupMemberList').html(grpMembersHtmlString);
 
-        // Add member functionality
-        $("#addMember").on("click", async function () {
-            const { value: newInviteEmail } = await Swal.fire({
-                title: "Add new member",
-                input: "text",
-                showCancelButton: true,
-                inputValidator: (value) => !value && "This is a required field!"
+            // Add member functionality
+            $("#addMember").on("click", async function () {
+                const { value: newInviteEmail } = await Swal.fire({
+                    title: "Add new member",
+                    input: "text",
+                    showCancelButton: true,
+                    inputValidator: (value) => !value && "This is a required field!"
+                });
+
+                if (newInviteEmail) {
+                    Swal.fire({ title: 'Adding...', text: 'Please wait...', allowOutsideClick: false, didOpen: Swal.showLoading });
+
+                    await fetchWithAuth("/groups/addNewMember", {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                        body: JSON.stringify({ group_id: groupId, invited_user_email: newInviteEmail })
+                    })
+                        .then(response => response.json())
+                        .then(json => {
+                            if (json.error) Swal.fire(json.error);
+                            else Swal.fire("New member added!");
+                        })
+                        .catch(() => Swal.fire("Error, please try again!"));
+                }
             });
-
-            if (newInviteEmail) {
-                Swal.fire({ title: 'Adding...', text: 'Please wait...', allowOutsideClick: false, didOpen: Swal.showLoading });
-
-                await fetchWithAuth("/groups/addNewMember", {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                    body: JSON.stringify({ group_id: groupId, invited_user_email: newInviteEmail })
-                })
-                .then(response => response.json())
-                .then(json => {
-                    if (json.error) Swal.fire(json.error);
-                    else Swal.fire("New member added!");
-                })
-                .catch(() => Swal.fire("Error, please try again!"));
-            }
-        });
-    } catch (error) {
-        console.error('Error fetching group details:', error);
-        alert("Error fetching group details. Check console.");
-    }
-};
+        } catch (error) {
+            console.error('Error fetching group details:', error);
+            alert("Error fetching group details. Check console.");
+        }
+    };
 
 
     // Populate Tabs and Flashcards
@@ -186,7 +185,7 @@ const fetchGroupDetails = async () => {
             const response = await fetch(`http://localhost:3000/study/${groupId}/materials`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                body: JSON.stringify({ content, tags })
+                body: JSON.stringify({ token, content, tags })
             });
 
             const result = await response.json();
@@ -198,7 +197,27 @@ const fetchGroupDetails = async () => {
             console.error('Error adding material:', error);
         }
     });
-
+    const fetchMaterials = async () => {
+        try {
+          const token = sessionStorage.getItem("authToken"); // Get token from sessionStorage
+          const response = await fetch(`http://localhost:3000/study/${groupId}/materials`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            }
+          });
+    
+          const data = await response.json();
+    
+          if (data.materials) {
+            // Call function to populate tabs and flashcards
+            populateTabsAndFlashcards(data.materials);
+          }
+        } catch (error) {
+          console.error('Error fetching materials:', error);
+        }
+      };
     // Initial fetch of group details and materials
     fetchGroupDetails();
     fetchMaterials();

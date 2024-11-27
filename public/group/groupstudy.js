@@ -12,31 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const url = new URL(window.location.href);
     const params = new URLSearchParams(url.search);
     const groupId = params.get('id');
-    console.log("Group ID:", groupId); // Log the groupId to check
-  
-    // Fetch study materials from the backend
-    const fetchMaterials = async () => {
-      try {
-        const token = sessionStorage.getItem("authToken"); // Get token from sessionStorage
-        const response = await fetch(`http://localhost:3000/study/${groupId}/materials`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          }
-        });
-  
-        const data = await response.json();
-        console.log('Materials Data:', data); // Log to check the fetched data
-  
-        if (data.materials) {
-          // Call function to populate tabs and flashcards
-          populateTabsAndFlashcards(data.materials);
-        }
-      } catch (error) {
-        console.error('Error fetching materials:', error);
-      }
-    };
   
     // Populate tags (tabs) and flashcards
     const populateTabsAndFlashcards = (materials) => {
@@ -102,42 +77,5 @@ document.addEventListener('DOMContentLoaded', () => {
     cancelBtn.addEventListener('click', () => {
       addMaterialPopup.style.display = 'none';  // Hide the popup
     });
-  
-    saveMaterialBtn.addEventListener('click', async () => {
-      const content = materialContent.value;
-      const tags = materialTags.value;
-  
-      if (!content || !tags) {
-        alert("Both content and tags are required.");
-        return;
-      }
-  
-      const token = sessionStorage.getItem("authToken");
-  
-      try {
-        const response = await fetch(`http://localhost:3000/study/${groupId}/materials`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({ userId: 1, content, tags })  // Adjust userId as necessary
-        });
-  
-        const result = await response.json();
-        console.log('Material added:', result);
-  
-        if (result.message === "Material added successfully!") {
-          // Close the popup and refetch materials
-          addMaterialPopup.style.display = 'none';
-          fetchMaterials(); // Refetch materials after adding new one
-        }
-      } catch (error) {
-        console.error('Error adding material:', error);
-      }
-    });
-  
-    // Initial fetch to load data when the page is ready
-    fetchMaterials();
   });
   

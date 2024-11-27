@@ -20,8 +20,15 @@ async function fetchUserInfo() {
             method: 'GET'
         });
         const res = await response.json();
-        sessionStorage.setItem("profilePic", res.profile_pic);
-        updateProfilePic(res.profile_pic); // Update the profile picture in the header
+        if(res.profile_pic == null) {
+            sessionStorage.setItem("profilePic", "../img/blank_pfp.png");
+            updateProfilePic("../img/blank_pfp.png"); // Update the profile picture in the header
+        }
+        else {
+            sessionStorage.setItem("profilePic", res.profile_pic);
+            updateProfilePic(res.profile_pic); // Update the profile picture in the header
+        }
+        
     } catch (err) {
         alert("Error fetching user info");
     }

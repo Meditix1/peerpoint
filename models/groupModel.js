@@ -85,7 +85,7 @@ module.exports.getGroupDetails = async function getGroupDetails(group_id) {
     var grpMemberIds = groupMembersRows.map(a => a.user_id).filter((a, index, self) => self.indexOf(a) === index);
     grpMemberIds = "(" + grpMemberIds.join(",") + ")";
 
-    const sqlGetGrpMemberInfo = `SELECT user_id, username FROM users WHERE user_id IN ${grpMemberIds}`;
+    const sqlGetGrpMemberInfo = `SELECT user_id, username, profile_pic FROM users WHERE user_id IN ${grpMemberIds}`;
     const members = await query(sqlGetGrpMemberInfo);
     const membersRows = members.rows;
 
@@ -98,7 +98,8 @@ module.exports.getGroupDetails = async function getGroupDetails(group_id) {
             "user_id": memberUserInfo.user_id,
             "username": memberUserInfo.username,
             "joined_at": memberInfo.joined_at,
-            "group_role": memberInfo.group_role
+            "group_role": memberInfo.group_role,
+            "profile_picture_url": memberUserInfo.profile_pic
         }
 
         groupMembersCompleteInfo.push(info);
@@ -110,7 +111,7 @@ module.exports.getGroupDetails = async function getGroupDetails(group_id) {
         "created_by": groupRows.createdBy,
         "created_at": groupRows.created_at,
         "description": groupRows.description,
-        "group_members": groupMembersCompleteInfo
+        "group_members": groupMembersCompleteInfo,
     };
 
     return toReturn;
