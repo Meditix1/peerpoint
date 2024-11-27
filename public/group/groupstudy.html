@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Group Study - Materials</title>
+  <link rel="stylesheet" href="../css/groupstudy.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Study Materials</h1>
+    
+    <!-- Tabs for filtering by tags -->
+    <div id="tabs-container" class="tabs-container"></div>
+
+    <!-- Flashcards for the study materials -->
+    <div id="flashcards-container" class="flashcards-container"></div>
+
+    <!-- Button to trigger the 'Add Material' form -->
+    <button id="add-material-btn" class="btn">Add Material</button>
+  </div>
+
+  <!-- Popup form to add new material -->
+  <div id="add-material-popup" class="popup-container">
+    <div class="popup-content">
+      <h2>Add Study Material</h2>
+      <textarea id="material-content" placeholder="Enter study content"></textarea>
+      <input type="text" id="material-tags" placeholder="Enter tags (comma separated)">
+      <div class="popup-buttons">
+        <button id="save-material-btn" class="btn">Save</button>
+        <button id="cancel-btn" class="btn">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="groupstudy.js"></script>
+</body>
+</html>
