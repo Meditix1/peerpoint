@@ -40,6 +40,11 @@ module.exports.getUserViewableGroups = async function getUserViewableGroups(toke
         GROUP BY g.id;`;
 
     const groups = await query(sqlGroups, [requestingUserId]);
+
+    if (groups.rows.length == 0) {
+        return [];
+    }
+
     const groupRows = groups.rows;
 
     var createdByIds = groupRows.map(a => a.created_by).filter((a, index, self) => self.indexOf(a) === index);
@@ -80,7 +85,7 @@ module.exports.getGroupDetails = async function getGroupDetails(group_id) {
     var grpMemberIds = groupMembersRows.map(a => a.user_id).filter((a, index, self) => self.indexOf(a) === index);
     grpMemberIds = "(" + grpMemberIds.join(",") + ")";
 
-    const sqlGetGrpMemberInfo = `SELECT user_id, username FROM users WHERE user_id IN ${grpMemberIds}`;
+    const sqlGetGrpMemberInfo = `SELECT user_id, username, profile_pic FROM users WHERE user_id IN ${grpMemberIds}`;
     const members = await query(sqlGetGrpMemberInfo);
     const membersRows = members.rows;
 
@@ -93,7 +98,8 @@ module.exports.getGroupDetails = async function getGroupDetails(group_id) {
             "user_id": memberUserInfo.user_id,
             "username": memberUserInfo.username,
             "joined_at": memberInfo.joined_at,
-            "group_role": memberInfo.group_role
+            "group_role": memberInfo.group_role,
+            "profile_picture_url": memberUserInfo.profile_pic
         }
 
         groupMembersCompleteInfo.push(info);
@@ -105,8 +111,38 @@ module.exports.getGroupDetails = async function getGroupDetails(group_id) {
         "created_by": groupRows.createdBy,
         "created_at": groupRows.created_at,
         "description": groupRows.description,
-        "group_members": groupMembersCompleteInfo
+        "group_members": groupMembersCompleteInfo,
     };
 
     return toReturn;
 }
+
+module.exports.addMember = async function addNewMember(group_id, invited_user_email) {
+    try {
+        // Check if the invited user exists
+        const invitedUserSql = `SELECT user_id FROM users WHERE email = $1`;
+        const userRes = await query(invitedUserSql, [invited_user_email]);
+
+        if (userRes.rowCount === 0) {
+            return { error: "User not found." }; // User not found
+        }
+
+        const invitedUserId = userRes.rows[0].user_id;
+
+        // Attempt to insert the user into the group
+        const sql = `INSERT INTO group_members (group_id, user_id, group_role)
+                     VALUES ($1, $2, 'Member')`;
+
+        const insertResult = await query(sql, [group_id, invitedUserId]);
+
+        return insertResult;
+    } catch (error) {
+        if (error.code === '23505') { // Unique constraint violation
+            console.error("Duplicate entry: User already in the group.");
+            return { error: "User already in the group." };
+        } else {
+            console.error("Unexpected error:", error);
+            throw error; // Re-throw unexpected errors
+        }
+    }
+};

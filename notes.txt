@@ -1,0 +1,1 @@
+npm install express multer tesseract.js pdfjs-dist axios

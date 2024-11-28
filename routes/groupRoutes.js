@@ -56,5 +56,22 @@ router.get('/getGroupDetails', authMiddleware, async function (req,res) {
     }
 }) 
 
+router.post('/addNewMember', authMiddleware, async function (req, res) {
+    try {
+        group_id = req.body.group_id;
+        invited_user_email = req.body.invited_user_email;
 
+        model
+            .addMember(group_id, invited_user_email)
+            .then(function (results) {
+                if(results.error) {
+                    return res.status(400).json(results)
+                }
+                return res.status(200).json(results);
+            })
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ error: error });
+    }
+})
 module.exports = router;

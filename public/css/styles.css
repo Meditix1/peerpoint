@@ -1,0 +1,51 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #f4f4f4;
+  }
+  
+  .container {
+    max-width: 700px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .upload-box {
+    border: 2px dashed #ccc;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .upload-box input {
+    display: none;
+  }
+  
+  .upload-box label {
+    cursor: pointer;
+    color: #007bff;
+    text-decoration: underline;
+  }
+  
+  #result {
+    margin-top: 20px;
+  }
+  
+  .error {
+    color: red;
+  }
+  
+  #extractedText {
+    max-height: 300px; /* Limit the height of the extracted text container */
+    overflow-y: auto;  /* Allow vertical scrolling if text overflows */
+    white-space: pre-wrap; /* Wrap long lines of text */
+    word-wrap: break-word; /* Break long words */
+    background-color: #f4f4f4; /* Optional: add a background color */
+    padding: 10px; /* Optional: add some padding around the text */
+    border-radius: 4px; /* Optional: rounded corners for the container */
+    font-family: Arial, sans-serif; /* Optional: change font family */
+  }
+  
+  

@@ -58,7 +58,6 @@ router.post('/login', async function (req, res) {
 
                 if (bcrypt.compareSync(password, results.password_hash) == true) {
                     if (results.user_id) {
-                        console.log(results)
                         const user = { id: results.user_id, email: results.email, username: results.username };
                         const token = generateToken(user)
                         return res.status(200).json(token)
@@ -81,7 +80,6 @@ router.post('/login', async function (req, res) {
 router.post('/uploadProfilePic', authMiddleware,  async function (req, res) {
     let b64string = req.body.b64string;
     let token = req.body.token;
-    console.log(b64string);
     try {
         return model
             .uploadProfilePicture(b64string, token)
@@ -99,6 +97,29 @@ router.post('/uploadProfilePic', authMiddleware,  async function (req, res) {
     }
 });
 
+router.post('/updateUsername', authMiddleware,  async function (req, res) {
+    let newUsername = req.body.newUsername;
+    let token = req.body.token;
+    try {
+        return model
+            .updateUsername(newUsername, token)
+            .then(function (results) {
+                console.log(results)
+                const user = { id: results.user_id, email: results.email, username: results.username };
+                const token = generateToken(user)
+                
+                return res.status(200).json({ status: 200, token: token});
+            })
+            .catch(function (error) {
+                return res.status(500).json({ error: error });
+            });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: error });
+    }
+});
+
 router.get('/getUserInfo', async function (req,res) {
     try {
         userid = req.query.user_id;
@@ -107,7 +128,6 @@ router.get('/getUserInfo', async function (req,res) {
                 if (result == null) {
                     return res.status(400).json({ message: 'error!' });
                 }
-                console.log(result)
                 return res.status(200).json(result)
             })
     } catch (error) {
@@ -125,9 +145,9 @@ const generateToken = (user) => {
             username: user.username
         }
     };
-
+    
     // Generate the token
-    const token = jwt.sign(payload, process.env.JWT_KEY, { expiresIn: '1h' });
+    const token = jwt.sign(payload, process.env.JWT_KEY, { expiresIn: '6h' });
 
     return token;
 };
