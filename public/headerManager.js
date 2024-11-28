@@ -48,6 +48,7 @@ class WebsiteHeader extends HTMLElement {
             <div class="nav-links">
                 <a href="#">Home</a>
                 <a href="../group/groupList.html">Groups</a>
+                <a href="../forum/forum.html">Forum</a>
                 <a href="#">Services</a>
                 <a href="#">Contact</a>
             </div>

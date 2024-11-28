@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forum</title>
+    <script src="../headerManager.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="../css/site.css" />
+    <script src="https://cdn.tiny.cloud/1/k5my01dgmgh2l4u0re1sy9bqt5ekkmhx8cp9o0gbni6yspfn/tinymce/6/tinymce.min.js"></script>
+    <script>
+        tinymce.init({
+  selector: '#myTextarea',
+  menubar: false,
+  plugins: 'emoticons powerpaste casechange searchreplace autolink directionality advcode visualblocks visualchars image link media mediaembed codesample table charmap pagebreak nonbreaking anchor tableofcontents insertdatetime advlist lists checklist wordcount tinymcespellchecker editimage help formatpainter permanentpen charmap linkchecker emoticons advtable export autosave',
+  toolbar: 'undo redo formatpainter | blocks fontfamily fontsize | emoticons bold italic underline forecolor backcolor | alignleft aligncenter alignright alignjustify lineheight | removeformat',
+});
+
+    </script>
+</head>
+<body>
+    <website-header></website-header>
+    <h1>Hello forum</h1>
+    <form action="">
+        <label for="thread">Thread</label><br>
+        <input type="text" id="thread" name="thread"><br><br>
+        <label for="textarea">Description</label><br>
+        <textarea rows="5" id="myTextarea" cols="33"></textarea>
+        <label for="searchBar">Tags</label><br>
+        <div class="search-container">
+            <input 
+              type="text" 
+              id="searchBar" 
+              placeholder="Search or add an item" 
+              oninput="filterDropdown()">
+            <span class="icon" id="searchIcon" onclick="addOrSearch()">🔍</span>
+            <div class="dropdown" id="dropdown"></div>
+          </div>
+          <div class="tags" id="tags"></div>
+    </form>
+    <script>
+
+        const items = ["apple", "banana", "cherry", "date", "grape", "kiwi", "lemon"]
+        const tags = new Set()
+
+        const filterDropdown = () =>{
+            const input = document.getElementById("searchBar").value.trim().toLowerCase()
+            const dropdown = document.getElementById("dropdown")
+            const icon = document.getElementById("searchIcon")
+            dropdown.innerHTML = ""
+            dropdown.style.display = "none"
+
+            if(input){
+                const filteredItems = items.filter(item => item.includes(input))
+
+                if(filteredItems.length > 0){
+                    filteredItems.forEach(item => {
+                        const option = document.createElement("div")
+                        option.textContent = item
+                        option.onclick = () => selectItem(item)
+                        dropdown.appendChild(option)
+                    })
+                    icon.textContent = "🔍"
+                }else{
+                    icon.textContent = "➕"
+                }
+                dropdown.style.display = "block"
+            }else{
+                icon.textContent = "🔍"
+            }
+        }
+
+        const addOrSearch = () =>{
+            const input = document.getElementById("searchBar").value.trim().toLowerCase();
+            const icon = document.getElementById("searchIcon");
+
+            if(icon.textContent === "➕" && input){
+                items.push(input)
+                selectItem(input)
+                document.getElementById("searchBar").value = ""
+                filterDropdown();
+            }
+        }
+
+        const selectItem = (item) =>{
+            const tagsContainer = document.getElementById("tags")
+            if(!tags.has(item)){
+                tags.add(item)
+                const tag = document.createElement("div")
+                tag.className = "tag"
+                tag.innerHTML = `${item} <span class="remove" onclick="removeTag('${item}')">❌</span>` 
+                tagsContainer.appendChild(tag)
+            }
+            document.getElementById("dropdown").style.display = "none"
+        }
+
+        const removeTag = (item) =>{
+            tags.delete(item)
+            const tagsContainer = document.getElementById("tags")
+            const tag = Array.from(tagsContainer.children).find(tag => tag.textContent.includes(item))
+            if(tag) tagsContainer.removeChild(tag)
+        }
+    </script>
+   
+</body>
+</html>
