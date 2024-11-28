@@ -52,8 +52,14 @@ class WebsiteHeader extends HTMLElement {
                 PeerPoint
             </div>
             <div class="nav-links">
+
+                <a href="#">Home</a>
+                <a href="../group/groupList.html">Groups</a>
+                <a href="../forum/forum.html">Forum</a>
+
                 <a href="/main/dashboard.html">Home</a>
                 <a href="../group/groupList.html">Projects</a>
+
                 <a href="#">Services</a>
                 <a href="#">Contact</a>
             </div>
