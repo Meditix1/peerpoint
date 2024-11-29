@@ -7,12 +7,10 @@ const jwt = require('jsonwebtoken');
 // ------------------------- Functions ------------------------------///
 
 // Creates a new account
-module.exports.createGroup = async function createGroup(grpName, grpDesc, invitedMembers, token) {
+module.exports.createGroup = async function createGroup(grpName, grpDesc, token) {
     const decoded = jwt.decode(token);
     const createdBy = decoded.user.id;
     var createdAt = new Date();
-    console.log(createdAt);
-    // TODO: do smth with invitedMembers
 
     const sql = `INSERT INTO groups (group_name, description, created_by, is_active) 
         VALUES ('${grpName}', '${grpDesc}', ${createdBy}, true)

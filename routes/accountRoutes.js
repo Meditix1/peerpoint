@@ -10,17 +10,27 @@ const authMiddleware = require('../middleware/authMiddleware.js');
 router.post('/createAccount', async function (req, res) {
     try {
         hashedPassword = await bcrypt.hash(req.body.password, 10);
+        console.log(hashedPassword)
         email = req.body.email;
-        oauth_provider = req.body.oauth_provider;
-        oauth_id = req.body.oauth_id;
+        username = req.body.username;
+        
         model
-            .createAccount(hashedPassword, email, oauth_provider, oauth_id)
+            .createAccount(hashedPassword, email, username)
             .then(function (results) {
                 if (results == null) {
                     return res.status(400).json({ message: 'error!' });
                 }
                 console.log(results)
                 return res.status(200).json(results);
+            })
+            .catch(function(err) {
+                console.log(err)
+                if(err.code == '23505') { //duplicate key
+                    return res.status(400).json({ message: err.detail })
+                }
+                else {
+                    return res.status(400).json({ message: 'error!' });
+                }
             })
     } catch (error) {
         console.error(error)
@@ -53,7 +63,7 @@ router.post('/login', async function (req, res) {
             .authenticate(email)
             .then(async function (results) {
                 if ((password == null) || (results == null)) {
-                    return res.status(400).json({ message: 'login failed' });
+                    return res.status(400).json({ message: "Invalid credentials" });
                 }
 
                 if (bcrypt.compareSync(password, results.password_hash) == true) {
@@ -63,7 +73,7 @@ router.post('/login', async function (req, res) {
                         return res.status(200).json(token)
                     }
                 } else {
-                    return res.status(400).json("Invalid credentials");
+                    return res.status(400).json({ message: "Invalid credentials"});
                 }
             })
             .catch(function (error) {

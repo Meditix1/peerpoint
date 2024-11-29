@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 timeZoneName: 'short'
             };
             const formattedDate = createdAt.toLocaleString('en-US', options);
-            $('#createdAt').text(formattedDate);
+            //$('#createdAt').text(formattedDate);
 
             // Populate group members list
             let grpMembersHtmlString = "";
@@ -40,19 +40,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Static fallback profile image if no image URL is provided
                 const profileImageUrl = member.profile_picture_url || '../img/blank_pfp.png';
                 grpMembersHtmlString += `
-                <li>
-                    <img alt="Profile picture of ${member.username}" height="50" width="50" src="${profileImageUrl}" />
-                    <div class="member-info">
+                <li style="display:flex; flex-direction: row; gap: 15px; align-items:center;  font-weight: bold; margin-bottom: 15px;" >
+                    <img style="border-radius: 100px;" alt="Profile picture of ${member.username}" height="50" width="50" src="${profileImageUrl}" />
+                    <div class="member-info" style="display:flex; flex-direction: column;">
                         <span>${member.username}</span>
-                        <span>Role: ${member.group_role}</span>
+                        <span style="font-weight: normal;">${member.group_role}</span>
                     </div>
                 </li>`;
             }
 
             // Add new member functionality
             grpMembersHtmlString += `
-            <li id="addMember" style="cursor:pointer;">
-                <span class="material-symbols-outlined" style="font-size: 50px; margin-right: 10px;">add_circle</span>
+            <li id="addMember" style="display:flex; flex-direction: row; align-items:center; gap: 15px; cursor:pointer; font-weight: bold;" >
+                <span class="material-symbols-outlined" style="font-size: 50px;">add_circle</span>
                 <div class="member-info"><span>Add Member</span></div>
             </li>`;
 
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Add member functionality
             $("#addMember").on("click", async function () {
                 const { value: newInviteEmail } = await Swal.fire({
-                    title: "Add new member",
+                    title: "Add new member by Email",
                     input: "text",
                     showCancelButton: true,
                     inputValidator: (value) => !value && "This is a required field!"
@@ -124,20 +124,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Display Flashcards
     const displayFlashcards = (materials) => {
+        console.log(materials)
         const flashcardsContainer = document.getElementById('flashcards-container');
         flashcardsContainer.innerHTML = ''; // Clear existing flashcards
 
         materials.forEach(material => {
             const flashcard = document.createElement('div');
-            flashcard.classList.add('flashcard');
+           // flashcard.classList.add('flashcard');
+            
             flashcard.innerHTML = `
-                <div class="flashcard-header">
-                    <h3>Material ${material.id}</h3>
-                    <p><strong>Tags:</strong> ${material.tags}</p>
-                </div>
-                <div class="flashcard-body">
-                    <p>${material.content}</p>
-                </div>
+                <li class="list-group-item">
+                    <h6 class="mb-1" style="font-weight: bold;">Tags: ${material.tags}</h6>
+                    <p class="mb-1">${material.content}</p>
+                    <small class="text-muted">Added on ${material.created_at}</small>
+                </li>
             `;
             flashcardsContainer.appendChild(flashcard);
         });

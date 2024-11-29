@@ -11,10 +11,9 @@ router.post('/createGroup', authMiddleware, async function (req, res) {
     try {
         grpName = req.body.grpName;
         grpDesc = req.body.grpDesc;
-        invitedMembers = req.body.invitedMembers;
         token = req.body.jwt;
         model
-            .createGroup(grpName,grpDesc,invitedMembers, token)
+            .createGroup(grpName,grpDesc, token)
             .then(function (results) {
                 if (results == null) {
                     return res.status(400).json({ message: 'error!' });

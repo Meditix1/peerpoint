@@ -7,18 +7,26 @@ const { configDotenv } = require('dotenv');
 // ------------------------- Functions ------------------------------///
 
 // Creates a new account
-module.exports.createAccount = function createAccount(password, email, oauth_provider, oauth_id) {
-    const sql = `INSERT INTO users (password_hash, email) 
-        VALUES ('${password}', '${email}')`;
+module.exports.createAccount = async function createAccount(password, email, username) {
+    try {
 
-    console.log('Executing query:', sql);
-    return query(sql);
+        const sql = `INSERT INTO users (password_hash, email, username) 
+        VALUES ($1, $2, $3)`;
+
+        console.log('Executing query:', sql, [password, email, username]);
+        var results = await query(sql, [password, email, username]);
+        console.log(results)
+        return results;
+
+    } catch (error) {
+        throw error;
+    }
 }
 
 // Checks if a username/email already exists
 module.exports.checkAccountExists = function checkAccountExists(email) {
     const sql = 'SELECT 1 FROM users WHERE email = $1';
-    
+
     console.log('Executing query:', sql, [email]);
     return query(sql, [email])
         .then(result => result.rowCount > 0);

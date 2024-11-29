@@ -14,7 +14,6 @@ $(document).ready(function () {
         columns: [
             { data: 'group_name', title: "Group Name" },
             { data: 'created_by', title: "Created By" },
-            { data: 'description', title: "Description" },
             {
                 data: 'created_at',
                 title: "Created At",

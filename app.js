@@ -19,6 +19,10 @@ app.use(express.raw({ type: 'application/json' }));
 
 app.use(express.static('public'));
 
+// Redirect from the root URL to /account/login.html
+app.get('/', (req, res) => {
+    res.redirect('/account/login.html');
+});
 
 app.use('/', routes)
 app.use('/account', accountRoutes)
