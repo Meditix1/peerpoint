@@ -6,6 +6,7 @@ const mainRoutes = require('./routes/mainRoutes.js');
 const groupRoutes = require('./routes/groupRoutes.js');
 const  ocrRoutes = require('./routes/OCRroutes.js');
 const groupstudyRoutes = require("./routes/groupstudyRoutes.js")
+const forumRoutes = require("./routes/forumRoutes.js")
 
 const bodyParser = require("body-parser");
 
@@ -30,5 +31,6 @@ app.use('/main', mainRoutes)
 app.use('/groups', groupRoutes)
 app.use('/ocr', ocrRoutes); // Add the endpoint for flashcards
 app.use('/study', groupstudyRoutes); // Add the endpoint for flashcards
+app.use('/forum', forumRoutes)
 
 module.exports = app;
