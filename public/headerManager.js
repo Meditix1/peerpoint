@@ -58,6 +58,7 @@ class WebsiteHeader extends HTMLElement {
                 
                 <a href="../group/groupList.html">Projects</a>
                 <a href="../forum/forum.html">Forum</a>
+                <a href="../ocr/ocr.html">Text Reader</a>
 
             </div>
             <div class="profile">

@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(url.search);
     const groupId = params.get('id');
     const token = sessionStorage.getItem("authToken");
-
+    $("#grpChatLink").attr('href', "./groupChat.html?id="+groupId)
     // Fetch Group Details
     const fetchGroupDetails = async () => {
         try {
