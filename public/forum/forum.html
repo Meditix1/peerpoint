@@ -1,105 +1,330 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forum</title>
     <script src="../headerManager.js" type="text/javascript"></script>
     <link rel="stylesheet" href="../css/site.css" />
-    <script src="https://cdn.tiny.cloud/1/k5my01dgmgh2l4u0re1sy9bqt5ekkmhx8cp9o0gbni6yspfn/tinymce/6/tinymce.min.js"></script>
+    <script
+        src="https://cdn.tiny.cloud/1/k5my01dgmgh2l4u0re1sy9bqt5ekkmhx8cp9o0gbni6yspfn/tinymce/6/tinymce.min.js"></script>
     <script>
         tinymce.init({
-  selector: '#myTextarea',
-  menubar: false,
-  plugins: 'emoticons powerpaste casechange searchreplace autolink directionality advcode visualblocks visualchars image link media mediaembed codesample table charmap pagebreak nonbreaking anchor tableofcontents insertdatetime advlist lists checklist wordcount tinymcespellchecker editimage help formatpainter permanentpen charmap linkchecker emoticons advtable export autosave',
-  toolbar: 'undo redo formatpainter | blocks fontfamily fontsize | emoticons bold italic underline forecolor backcolor | alignleft aligncenter alignright alignjustify lineheight | removeformat',
-});
+            selector: '#myTextarea',
+            height: 200,
+            menubar: false,
+            plugins: 'emoticons powerpaste casechange searchreplace autolink directionality advcode visualblocks visualchars image link media mediaembed codesample table charmap pagebreak nonbreaking anchor tableofcontents insertdatetime advlist lists checklist wordcount tinymcespellchecker editimage help formatpainter permanentpen charmap linkchecker emoticons advtable export autosave',
+            toolbar: 'undo redo formatpainter | blocks fontfamily fontsize | emoticons bold italic underline forecolor backcolor | alignleft aligncenter alignright alignjustify lineheight | removeformat',
+        });
 
     </script>
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+            background-color: #fad0c4;
+            /* Light background */
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+            /* Gradient color */
+            border-radius: 4px;
+            /* Rounded edges */
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, #f8a5c2, #fbc2eb);
+            /* Slightly brighter on hover */
+        }
+
+        ::-webkit-scrollbar-track {
+            background-color: #ffffff;
+            /* White track */
+            border-radius: 4px;
+        }
+
+
+
+
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            overflow-y: hidden;
+
+
+
+        }
+
+        .main {
+            display: flex;
+            justify-content: center;
+            position: relative;
+            flex-wrap: no-wrap;
+
+        }
+
+        .form {
+
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 600px;
+            margin: auto;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 90%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus {
+            border-color: #007BFF;
+            outline: none;
+        }
+
+        .search-container {
+            position: relative;
+        }
+
+        #searchBar {
+            width: calc(95% - 40px);
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .icon {
+            position: absolute;
+            right: 5px;
+            top: 10px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .dropdown {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #fff;
+            max-height: 150px;
+            overflow-y: auto;
+            display: none;
+            /* Hide by default */
+        }
+
+        .dropdown div {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .dropdown div:hover {
+            background-color: #f0f0f0;
+        }
+
+        .tags {
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .tags span {
+            background-color: #007BFF;
+            color: white;
+            border-radius: 4px;
+            padding: 5px 10px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+
+        #submit {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        #submit:hover {
+            background-color: #0056b3;
+        }
+
+        .forum-home {
+            width: 600px;
+            height: 100vh;
+            overflow-y: scroll;
+            background-color: antiquewhite;
+            scrollbar-face-color: #ff9a9e;
+            scrollbar-track-color: #fad0c4;
+            display: flex;
+            align-items: center;
+            align-content: center;
+            flex-direction: column;
+            box-sizing: border-box;
+        }
+
+        .create {
+            margin-top: -700px;
+        }
+
+        .left {
+            height: 100vh;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+        }
+
+        .left button:first-child {
+            
+            margin-top: 80px;
+            height: 50px;
+            width: 150px;
+            background-color: antiquewhite;
+            border-radius: 10px;
+            font-size: 20px;
+            transition: transform 0.2s;
+            cursor: pointer;
+            user-select: none
+        }
+
+        .left button:last-child {
+            
+            margin-top: 20px;
+            height: 50px;
+            width: 150px;
+            background-color: antiquewhite;
+            border-radius: 10px;
+            font-size: 20px;
+            transition: transform 0.2s;
+            cursor: pointer;
+            user-select: none
+        }
+
+
+        .right {
+            height: 100vh;
+            flex: 1;
+            display: flex;
+            justify-content: center;
+
+
+        }
+
+        .right button {
+            margin-top: 80px;
+            height: 50px;
+            width: 150px;
+            background-color: antiquewhite;
+            border-radius: 10px;
+            font-size: 20px;
+            transition: transform 0.2s;
+            cursor: pointer;
+            user-select: none
+        }
+
+        .right button:hover {
+            transform: scale(1.1);
+        }
+
+        .left button:hover {
+            transform: scale(1.1);
+        }
+
+
+        .single{
+            width: 80%;
+            height:280px;
+            display: flex;
+            justify-content: space-evenly;
+            flex-direction: column;
+            margin-top: 20px;
+            background-color: #ffffff;
+            align-items: center;
+            align-content: center;
+            border-radius: 20px;
+            border: 2px solid #ffd32c;
+            flex-shrink: 0;
+            
+        }
+
+        .single-thread{
+            background-color: white;
+            width: 92%;
+            height: 50px;
+            display: flex;
+            flex-direction: column; /* Stacks child elements vertically */
+            justify-content: center; /* Aligns vertically (centers text) */
+            align-items: flex-start;
+            padding-left: 10px;
+            border-radius: 10px;
+            border: 2px solid #ffd32c;
+        }
+
+        .single-description{
+            background-color: #ffffff;
+            width: 90%;
+            height: 120px;
+            padding: 10px;
+            border: 2px solid #ffd32c;
+            border-radius: 10px;
+            overflow-y: scroll;
+        }
+
+        img{
+            width: 24px;
+            height:24px
+        }
+
+        .like-unlike{
+            display: flex;
+            width: 90%;
+            justify-content: space-between; /* Aligns vertically (centers text) */
+            
+        }
+
+        
+    </style>
+    <script src="./forum.js" type="text/javascript"></script>
+    <script src="../fetch.js" type="text/javascript"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
+
 <body>
     <website-header></website-header>
-    <h1>Hello forum</h1>
-    <form action="">
-        <label for="thread">Thread</label><br>
-        <input type="text" id="thread" name="thread"><br><br>
-        <label for="textarea">Description</label><br>
-        <textarea rows="5" id="myTextarea" cols="33"></textarea>
-        <label for="searchBar">Tags</label><br>
-        <div class="search-container">
-            <input 
-              type="text" 
-              id="searchBar" 
-              placeholder="Search or add an item" 
-              oninput="filterDropdown()">
-            <span class="icon" id="searchIcon" onclick="addOrSearch()">🔍</span>
-            <div class="dropdown" id="dropdown"></div>
-          </div>
-          <div class="tags" id="tags"></div>
-    </form>
-    <script>
+    <div class="main">
+        <div class="left">
+           <button onclick="loadForums()" class="all-forums-button">Forum</button>
+           <button onclick="loadMyForums()" class="my-forums-button">My Forum</button>
+        </div>
+        <div class="forum-home">
 
-        const items = ["apple", "banana", "cherry", "date", "grape", "kiwi", "lemon"]
-        const tags = new Set()
+        </div>
 
-        const filterDropdown = () =>{
-            const input = document.getElementById("searchBar").value.trim().toLowerCase()
-            const dropdown = document.getElementById("dropdown")
-            const icon = document.getElementById("searchIcon")
-            dropdown.innerHTML = ""
-            dropdown.style.display = "none"
+        <div class="right">
+            <button onclick="OpenForm()">Create +</button>
+        </div>
+    </div>
 
-            if(input){
-                const filteredItems = items.filter(item => item.includes(input))
-
-                if(filteredItems.length > 0){
-                    filteredItems.forEach(item => {
-                        const option = document.createElement("div")
-                        option.textContent = item
-                        option.onclick = () => selectItem(item)
-                        dropdown.appendChild(option)
-                    })
-                    icon.textContent = "🔍"
-                }else{
-                    icon.textContent = "➕"
-                }
-                dropdown.style.display = "block"
-            }else{
-                icon.textContent = "🔍"
-            }
-        }
-
-        const addOrSearch = () =>{
-            const input = document.getElementById("searchBar").value.trim().toLowerCase();
-            const icon = document.getElementById("searchIcon");
-
-            if(icon.textContent === "➕" && input){
-                items.push(input)
-                selectItem(input)
-                document.getElementById("searchBar").value = ""
-                filterDropdown();
-            }
-        }
-
-        const selectItem = (item) =>{
-            const tagsContainer = document.getElementById("tags")
-            if(!tags.has(item)){
-                tags.add(item)
-                const tag = document.createElement("div")
-                tag.className = "tag"
-                tag.innerHTML = `${item} <span class="remove" onclick="removeTag('${item}')">❌</span>` 
-                tagsContainer.appendChild(tag)
-            }
-            document.getElementById("dropdown").style.display = "none"
-        }
-
-        const removeTag = (item) =>{
-            tags.delete(item)
-            const tagsContainer = document.getElementById("tags")
-            const tag = Array.from(tagsContainer.children).find(tag => tag.textContent.includes(item))
-            if(tag) tagsContainer.removeChild(tag)
-        }
-    </script>
-   
 </body>
+
 </html>
